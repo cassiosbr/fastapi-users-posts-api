@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserPostResponse, UserResponse
 from app.services.user_service import UserService
 from app.repositories.user_repository import UserRepository
 from app.db.session import get_db
@@ -37,6 +37,11 @@ def get_all_users(db: Session = Depends(get_db), service: UserService = Depends(
     #     UserResponse(id=user.id, name=user.name, email=user.email)
     #     for user in users
     # ]
+
+@router.get("-posts", response_model=list[UserPostResponse])
+def get_all_users_with_posts(db: Session = Depends(get_db), service: UserService = Depends(get_user_service), current_user: User = Depends(get_current_user)):
+    print('listando todos os usuários e seus posts')
+    return service.get_all_users_with_posts(db)
 
 @router.get("/{user_id}", response_model=UserResponse)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db), service: UserService = Depends(get_user_service), current_user: User = Depends(get_current_user)):

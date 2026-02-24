@@ -27,6 +27,9 @@ class UserService:
     def get_all_users(self, db):
         return self.user_repository.get_all_users(db)
 
+    def get_all_users_with_posts(self, db):
+        return self.user_repository.get_all_users_with_posts(db)
+
     def get_user_by_id(self, db, user_id: int):
         user = self.user_repository.get_user_by_id(db, user_id)
         if not user:

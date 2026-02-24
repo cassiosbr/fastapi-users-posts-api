@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from app.models.user import User
 
 class UserRepository:
@@ -18,6 +18,10 @@ class UserRepository:
     @staticmethod
     def get_all_users(db: Session):
         return db.query(User).all()
+
+    @staticmethod
+    def get_all_users_with_posts(db: Session):
+        return db.query(User).options(selectinload(User.posts)).all()
 
     @staticmethod
     def get_user_by_id(db: Session, user_id: int):
