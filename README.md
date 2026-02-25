@@ -92,6 +92,21 @@ curl -X GET "http://localhost:8000/users-posts" \
    -H "Authorization: Bearer $TOKEN"
 ```
 
+### Quais rotas usam lazy vs eager?
+
+O SQLAlchemy usa **lazy loading por padrão** nas relationships (ex.: `User.posts`). Isso significa que os dados relacionados só são carregados quando a propriedade é acessada.
+
+Na prática, nesta API:
+
+- `GET /users/` e `GET /users/{user_id}`
+   - **Lazy (padrão) / sem relacionamento no response**
+   - O response model (`UserResponse`) não inclui `posts`, então os posts não são acessados/serializados.
+- `GET /users-posts`
+   - **Eager loading (select-in)**
+   - A query usa `selectinload(User.posts)` no repositório para trazer `posts` de forma eficiente e evitar N+1.
+- Rotas de `posts` (`GET /posts/`, `POST /posts/`)
+   - Não dependem de carregar `Post.user` no response atual (o schema usa `user_id`). A relationship `Post.user` continua lazy por padrão, mas não é usada para serialização.
+
 ### 3. Testes
 
 - Testes unitários utilizam mocks para isolar dependências.
