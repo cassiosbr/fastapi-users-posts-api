@@ -8,7 +8,7 @@ class UserCreate(BaseModel):
     password: str = Field(min_length=6, max_length=128)
 
 class UserResponse(BaseModel):
-    id: int
+    id: str
     name: str
     email: EmailStr
 
@@ -17,7 +17,7 @@ class UserResponse(BaseModel):
 
 
 class UserPostResponse(BaseModel):
-    id: int
+    id: str
     name: str
     email: EmailStr
     posts: list[PostResponse]

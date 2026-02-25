@@ -7,7 +7,7 @@ class PostCreate(BaseModel):
 class PostResponse(BaseModel):
     title: str
     content: str
-    user_id: int
+    user_id: str
 
     class Config:
         from_attributes = True
